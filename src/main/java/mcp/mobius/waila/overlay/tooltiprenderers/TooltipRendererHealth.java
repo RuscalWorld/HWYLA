@@ -1,10 +1,13 @@
 package mcp.mobius.waila.overlay.tooltiprenderers;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.ICommonAccessor;
 import mcp.mobius.waila.api.ITooltipRenderer;
 import mcp.mobius.waila.overlay.DisplayUtil;
+import mcp.mobius.waila.overlay.HeartVariant;
 import mcp.mobius.waila.overlay.IconUI;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -34,19 +37,21 @@ public class TooltipRendererHealth implements ITooltipRenderer {
         int heartsPerLine = (int) (Math.min(maxHearts, Math.ceil(maxHealth)));
 
         int xOffset = 0;
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
         for (int i = 1; i <= heartCount; i++) {
             if (i <= MathHelper.floor(health)) {
-                DisplayUtil.renderIcon(x + xOffset, y, 8, 8, IconUI.HEART);
+                DisplayUtil.renderHeart(matrices, x + xOffset, y, HeartVariant.FULL);
                 xOffset += 8;
             }
 
             if ((i > health) && (i < health + 1)) {
-                DisplayUtil.renderIcon(x + xOffset, y, 8, 8, IconUI.HALF_HEART);
+                DisplayUtil.renderHeart(matrices, x + xOffset, y, HeartVariant.HALF);
                 xOffset += 8;
             }
 
             if (i >= health + 1) {
-                DisplayUtil.renderIcon(x + xOffset, y, 8, 8, IconUI.EMPTY_HEART);
+                DisplayUtil.renderHeart(matrices, x + xOffset, y, HeartVariant.EMPTY);
                 xOffset += 8;
             }
 
@@ -54,7 +59,6 @@ public class TooltipRendererHealth implements ITooltipRenderer {
                 y += 10;
                 xOffset = 0;
             }
-
         }
     }
 }

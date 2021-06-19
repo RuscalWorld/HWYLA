@@ -3,10 +3,13 @@ package mcp.mobius.waila.overlay;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mcp.mobius.waila.Waila;
+import mcp.mobius.waila.overlay.tooltiprenderers.TooltipRendererHealth;
 import mcp.mobius.waila.utils.WailaExceptionHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.hud.InGameOverlayRenderer;
+import net.minecraft.client.gui.screen.Overlay;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -47,15 +50,9 @@ public class DisplayUtil {
             if (stack.getCount() < 1)
                 s = Formatting.RED + String.valueOf(stack.getCount());
 
-            // TODO: ...
-            //RenderSystem.disableLighting();
             RenderSystem.disableDepthTest();
             RenderSystem.disableBlend();
-            // TODO: ...
-            //RenderSystem.translated(0, 0, MinecraftClient.getInstance().getItemRenderer().zOffset + 200F);
             fr.drawWithShadow(matrices, s, (float) (xPosition + 19 - 2 - fr.getWidth(s)), (float) (yPosition + 6 + 3), 16777215);
-            // TODO: ...
-            //RenderSystem.enableLighting();
             RenderSystem.enableDepthTest();
             RenderSystem.enableBlend();
         }
@@ -114,7 +111,7 @@ public class DisplayUtil {
         float zLevel = 0.0F;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_TEXTURE);
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         buffer.vertex(x, y + height, zLevel).texture((float) (textureX) * f, (float) (textureY + th) * f1).next();
         buffer.vertex(x + width, y + height, zLevel).texture((float) (textureX + tw) * f, (float) (textureY + th) * f1).next();
         buffer.vertex(x + width, y, zLevel).texture((float) (textureX + tw) * f, (float) (textureY) * f1).next();
@@ -145,6 +142,11 @@ public class DisplayUtil {
     public static String itemDisplayNameShort(ItemStack itemstack) {
         List<Text> list = itemDisplayNameMultiline(itemstack);
         return String.format(Waila.CONFIG.get().getFormatting().getBlockName(), list.get(0).getString());
+    }
+
+    public static void renderHeart(MatrixStack matrices, int x, int y, HeartVariant variant) {
+        if (variant == HeartVariant.HALF) renderHeart(matrices, x, y, HeartVariant.EMPTY);
+        DrawableHelper.drawTexture(matrices, x, y, 0, variant.getU(), 0, 9, 9, 256, 256);
     }
 
     public static void renderIcon(int x, int y, int sx, int sy, IconUI icon) {

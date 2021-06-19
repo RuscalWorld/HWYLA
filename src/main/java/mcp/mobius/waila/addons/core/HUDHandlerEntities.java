@@ -33,9 +33,9 @@ public class HUDHandlerEntities implements IEntityComponentProvider {
             float health = living.getHealth() / 2.0F;
             float maxHealth = living.getMaxHealth() / 2.0F;
 
-            if (living.getMaxHealth() > Waila.CONFIG.get().getGeneral().getMaxHealthForRender())
+            if (living.getMaxHealth() > Waila.CONFIG.get().getGeneral().getMaxHealthForRender()) {
                 tooltip.add(new TranslatableText("tooltip.waila.health", String.format("%.2f", health), String.format("%.2f", maxHealth)));
-            else {
+            } else {
                 NbtCompound healthData = new NbtCompound();
                 healthData.putFloat("health", health);
                 healthData.putFloat("max", maxHealth);
