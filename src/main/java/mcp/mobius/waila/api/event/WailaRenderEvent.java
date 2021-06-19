@@ -1,6 +1,8 @@
 package mcp.mobius.waila.api.event;
 
+import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.TextureUtil;
 import mcp.mobius.waila.api.ICommonAccessor;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
@@ -25,14 +27,14 @@ public class WailaRenderEvent {
             listeners -> event -> {
                 for (PreRender listener : listeners) {
                     if (listener.onPreRender(event)) {
-                        GlStateManager.enableRescaleNormal();
+                        //GlStateManager.enableRescaleNormal();
                         try {
                             loadGlState_.invoke();
                         } catch (Throwable e) {
                             // No-op
                         }
-                        GlStateManager.enableDepthTest();
-                        GlStateManager.popMatrix();
+                        GlStateManager._enableDepthTest();
+                        //GlStateManager.popMatrix();
                         return true;
                     }
                 }

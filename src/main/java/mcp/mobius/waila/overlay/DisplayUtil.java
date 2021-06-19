@@ -8,10 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.LiteralText;
@@ -50,12 +47,15 @@ public class DisplayUtil {
             if (stack.getCount() < 1)
                 s = Formatting.RED + String.valueOf(stack.getCount());
 
-            RenderSystem.disableLighting();
+            // TODO: ...
+            //RenderSystem.disableLighting();
             RenderSystem.disableDepthTest();
             RenderSystem.disableBlend();
-            RenderSystem.translated(0, 0, MinecraftClient.getInstance().getItemRenderer().zOffset + 200F);
+            // TODO: ...
+            //RenderSystem.translated(0, 0, MinecraftClient.getInstance().getItemRenderer().zOffset + 200F);
             fr.drawWithShadow(matrices, s, (float) (xPosition + 19 - 2 - fr.getWidth(s)), (float) (yPosition + 6 + 3), 16777215);
-            RenderSystem.enableLighting();
+            // TODO: ...
+            //RenderSystem.enableLighting();
             RenderSystem.enableDepthTest();
             RenderSystem.enableBlend();
         }
@@ -71,12 +71,14 @@ public class DisplayUtil {
     }
 
     public static void enable3DRender() {
-        RenderSystem.enableLighting();
+        // TODO: ...
+        //RenderSystem.enableLighting();
         RenderSystem.enableDepthTest();
     }
 
     public static void enable2DRender() {
-        RenderSystem.disableLighting();
+        // TODO: ...
+        //RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
     }
 
@@ -93,20 +95,25 @@ public class DisplayUtil {
         float f7 = (float) (endColor & 255) / 255.0F;
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
-        RenderSystem.disableAlphaTest();
+        // TODO: ...
+        //RenderSystem.disableAlphaTest();
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        RenderSystem.shadeModel(7425);
+        // TODO: ...
+        //RenderSystem.shadeModel(7425);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, VertexFormats.POSITION_COLOR);
+        // TODO: ...
+        buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
         buffer.vertex((double) (left + right), (double) top, (double) zLevel).color(f1, f2, f3, f).next();
         buffer.vertex((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).next();
         buffer.vertex((double) left, (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).next();
         buffer.vertex((double) (left + right), (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).next();
         tessellator.draw();
-        RenderSystem.shadeModel(7424);
+        // TODO: ...
+        //RenderSystem.shadeModel(7424);
         RenderSystem.disableBlend();
-        RenderSystem.enableAlphaTest();
+        // TODO: ...
+        //RenderSystem.enableAlphaTest();
         RenderSystem.enableTexture();
     }
 
@@ -116,7 +123,7 @@ public class DisplayUtil {
         float zLevel = 0.0F;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        buffer.begin(7, VertexFormats.POSITION_TEXTURE);
+        buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_TEXTURE);
         buffer.vertex(x, y + height, zLevel).texture((float) (textureX) * f, (float) (textureY + th) * f1).next();
         buffer.vertex(x + width, y + height, zLevel).texture((float) (textureX + tw) * f, (float) (textureY + th) * f1).next();
         buffer.vertex(x + width, y, zLevel).texture((float) (textureX + tw) * f, (float) (textureY) * f1).next();
@@ -150,16 +157,18 @@ public class DisplayUtil {
     }
 
     public static void renderIcon(int x, int y, int sx, int sy, IconUI icon) {
-        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         CLIENT.getTextureManager().bindTexture(DrawableHelper.GUI_ICONS_TEXTURE);
 
         if (icon == null)
             return;
 
-        RenderSystem.enableAlphaTest();
+        // TODO: ...
+        //RenderSystem.enableAlphaTest();
         if (icon.bu != -1)
             DisplayUtil.drawTexturedModalRect(x, y, icon.bu, icon.bv, sx, sy, icon.bsu, icon.bsv);
         DisplayUtil.drawTexturedModalRect(x, y, icon.u, icon.v, sx, sy, icon.su, icon.sv);
-        RenderSystem.disableAlphaTest();
+        // TODO: ...
+        //RenderSystem.disableAlphaTest();
     }
 }

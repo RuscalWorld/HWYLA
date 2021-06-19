@@ -2,10 +2,12 @@ package mcp.mobius.waila.gui.config.value;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -63,6 +65,11 @@ public class OptionsEntryValueInput<T> extends OptionsEntryValue<T> {
         } catch (NumberFormatException e) {
             // no-op
         }
+    }
+
+    @Override
+    public List<? extends Selectable> method_37025() {
+        return null;
     }
 
     private static class WatchedTextfield extends TextFieldWidget {

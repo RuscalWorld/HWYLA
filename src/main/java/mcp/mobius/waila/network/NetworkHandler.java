@@ -14,7 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
@@ -40,17 +40,17 @@ public class NetworkHandler {
                 if (entity == null)
                     return;
 
-                CompoundTag tag = new CompoundTag();
+                NbtCompound tag = new NbtCompound();
                 if (WailaRegistrar.INSTANCE.hasNBTEntityProviders(entity)) {
                     WailaRegistrar.INSTANCE.getNBTEntityProviders(entity).values().forEach(l -> l.forEach(p -> p.appendServerData(tag, (ServerPlayerEntity) player, world, (LivingEntity) entity)));
                 } else {
-                    entity.toTag(tag);
+                    entity.writeNbt(tag);
                 }
 
-                tag.putInt("WailaEntityID", entity.getEntityId());
+                tag.putInt("WailaEntityID", entity.getId());
 
                 PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-                buf.writeCompoundTag(tag);
+                buf.writeNbt(tag);
                 ((ServerPlayerEntity) player).networkHandler.sendPacket(new CustomPayloadS2CPacket(ClientNetworkHandler.RECEIVE_DATA, buf));
             });
         });
@@ -69,12 +69,12 @@ public class NetworkHandler {
 
                 BlockState state = world.getBlockState(pos);
 
-                CompoundTag tag = new CompoundTag();
+                NbtCompound tag = new NbtCompound();
                 if (WailaRegistrar.INSTANCE.hasNBTProviders(tile) || WailaRegistrar.INSTANCE.hasNBTProviders(state.getBlock())) {
                     WailaRegistrar.INSTANCE.getNBTProviders(tile).values().forEach(l -> l.forEach(p -> p.appendServerData(tag, (ServerPlayerEntity) player, world, tile)));
                     WailaRegistrar.INSTANCE.getNBTProviders(state.getBlock()).values().forEach(l -> l.forEach(p -> p.appendServerData(tag, (ServerPlayerEntity) player, world, tile)));
                 } else {
-                    tile.toTag(tag);
+                    tile.writeNbt(tag);
                 }
 
                 tag.putInt("x", pos.getX());
@@ -83,7 +83,7 @@ public class NetworkHandler {
                 tag.putString("id", Registry.BLOCK_ENTITY_TYPE.getId(tile.getType()).toString());
 
                 PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-                buf.writeCompoundTag(tag);
+                buf.writeNbt(tag);
                 ((ServerPlayerEntity) player).networkHandler.sendPacket(new CustomPayloadS2CPacket(ClientNetworkHandler.RECEIVE_DATA, buf));
             });
         });
@@ -95,7 +95,7 @@ public class NetworkHandler {
             return;
 
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-        buf.writeInt(entity.getEntityId());
+        buf.writeInt(entity.getId());
         MinecraftClient.getInstance().getNetworkHandler().getConnection().send(new CustomPayloadC2SPacket(REQUEST_ENTITY, buf));
     }
 

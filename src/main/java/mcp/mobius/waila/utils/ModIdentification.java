@@ -3,7 +3,6 @@ package mcp.mobius.waila.utils;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import java.util.HashMap;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
@@ -16,10 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ModIdentification {
 
@@ -74,6 +70,11 @@ public class ModIdentification {
         @Override
         public String getId() {
             return id;
+        }
+
+        @Override
+        public Collection<String> getProvides() {
+            return Collections.emptySet();
         }
 
         @Override

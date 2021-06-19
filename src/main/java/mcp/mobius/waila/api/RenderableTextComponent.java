@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import mcp.mobius.waila.api.impl.WailaRegistrar;
 import net.fabricmc.fabric.api.util.NbtType;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.StringNbtReader;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RenderableTextComponent extends LiteralText {
 
-    public RenderableTextComponent(Identifier id, CompoundTag data) {
+    public RenderableTextComponent(Identifier id, NbtCompound data) {
         super(getRenderString(id, data));
     }
 
@@ -25,15 +25,15 @@ public class RenderableTextComponent extends LiteralText {
 
     public List<RenderContainer> getRenderers() {
         List<RenderContainer> renderers = Lists.newArrayList();
-        CompoundTag data = getData();
+        NbtCompound data = getData();
         if (data.contains("renders")) {
-            ListTag list = data.getList("renders", NbtType.STRING);
+            NbtList list = data.getList("renders", NbtType.STRING);
             list.forEach(t -> {
-                StringTag stringTag = (StringTag) t;
+                NbtString stringTag = (NbtString) t;
                 try {
-                    CompoundTag tag = StringNbtReader.parse(stringTag.asString());
+                    NbtCompound tag = StringNbtReader.parse(stringTag.asString());
                     Identifier id = new Identifier(tag.getString("id"));
-                    CompoundTag dataTag = tag.getCompound("data");
+                    NbtCompound dataTag = tag.getCompound("data");
                     renderers.add(new RenderContainer(id, dataTag));
                 } catch (CommandSyntaxException e) {
                     // no-op
@@ -41,43 +41,43 @@ public class RenderableTextComponent extends LiteralText {
             });
         } else {
             Identifier id = new Identifier(data.getString("id"));
-            CompoundTag dataTag = data.getCompound("data");
+            NbtCompound dataTag = data.getCompound("data");
             renderers.add(new RenderContainer(id, dataTag));
         }
 
         return renderers;
     }
 
-    private CompoundTag getData() {
+    private NbtCompound getData() {
         try {
             return StringNbtReader.parse(getString());
         } catch (CommandSyntaxException e) {
-            return new CompoundTag();
+            return new NbtCompound();
         }
     }
 
-    private static String getRenderString(Identifier id, CompoundTag data) {
-        CompoundTag renderData = new CompoundTag();
+    private static String getRenderString(Identifier id, NbtCompound data) {
+        NbtCompound renderData = new NbtCompound();
         renderData.putString("id", id.toString());
         renderData.put("data", data);
         return renderData.toString();
     }
 
     private static String getRenderString(RenderableTextComponent... components) {
-        CompoundTag container = new CompoundTag();
-        ListTag renderData = new ListTag();
+        NbtCompound container = new NbtCompound();
+        NbtList renderData = new NbtList();
         for (RenderableTextComponent component : components)
-            renderData.add(StringTag.of(component.getString()));
+            renderData.add(NbtString.of(component.getString()));
         container.put("renders", renderData);
         return container.toString();
     }
 
     public static class RenderContainer {
         private final Identifier id;
-        private final CompoundTag data;
+        private final NbtCompound data;
         private final ITooltipRenderer renderer;
 
-        public RenderContainer(Identifier id, CompoundTag data) {
+        public RenderContainer(Identifier id, NbtCompound data) {
             this.id = id;
             this.data = data;
             this.renderer = WailaRegistrar.INSTANCE.getTooltipRenderer(id);
@@ -87,7 +87,7 @@ public class RenderableTextComponent extends LiteralText {
             return id;
         }
 
-        public CompoundTag getData() {
+        public NbtCompound getData() {
             return data;
         }
 

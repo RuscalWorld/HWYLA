@@ -1,11 +1,10 @@
 plugins {
-    id "com.matthewprenger.cursegradle" version "1.3.0"
-    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id "maven-publish"
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 def build_number = System.getenv('BUILD_NUMBER') ?: 'CUSTOM'
 
@@ -22,16 +21,13 @@ repositories {
 }
 
 dependencies {
-    compile "com.google.code.findbugs:jsr305:3.0.2"
+    implementation "com.google.code.findbugs:jsr305:3.0.2"
 
-    minecraft "com.mojang:minecraft:${mc_version}"
-    mappings "net.fabricmc:yarn:${mc_version}+build.${mappings_version}:v2"
-    modCompile "net.fabricmc:fabric-loader:${loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api-base:${api_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-command-api-v1:${api_commands_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-key-binding-api-v1:${api_keybinding_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-networking-v0:${api_networking_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-resource-loader-v0:${api_resources_version}"
+    minecraft "com.mojang:minecraft:${project.mc_version}"
+    mappings "net.fabricmc:yarn:${project.mappings_version}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.api_version}"
 }
 
 task sourcesJar(type: Jar) {
@@ -69,60 +65,4 @@ publishing {
             mavenLocal()
         }
     }
-}
-
-def curseRelations = {
-    requiredLibrary 'fabric-api'
-}
-
-curseforge {
-    if (project.hasProperty('curse_key_TehNut'))
-        apiKey = project.curse_key_TehNut
-
-    project {
-        id = "${curse_id}"
-        changelog = getChangelogText()
-        releaseType = 'release'
-
-        relations curseRelations
-
-        addGameVersion "1.16"
-        addGameVersion "Java 8"
-        addArtifact sourcesJar
-        addArtifact apiJar
-        mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
-
-        afterEvaluate {
-            uploadTask.dependsOn(remapJar)
-        }
-    }
-
-    options {
-        forgeGradleIntegration = false
-    }
-}
-
-String getChangelogText() {
-    def changelogFile = new File('changelog.txt')
-    String str = ''
-    String separator = '---'
-    int lineCount = 0
-    boolean done = false
-    changelogFile.eachLine {
-        if (done || it == null) {
-            return
-        }
-        if (lineCount < 3) {
-            lineCount++
-            if (it.startsWith(separator)) {
-                return
-            }
-        }
-        if (!it.startsWith(separator)) {
-            str += "$it" + (lineCount < 3 ? ':\n\n' : '\n')
-            return
-        }
-        done = true // once we go past the first version block, parse no more
-    }
-    return str
 }

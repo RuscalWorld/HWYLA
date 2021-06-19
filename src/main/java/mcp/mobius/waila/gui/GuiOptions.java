@@ -3,17 +3,17 @@ package mcp.mobius.waila.gui;
 import com.google.common.collect.Lists;
 import mcp.mobius.waila.gui.config.OptionsListWidget;
 import mcp.mobius.waila.gui.config.value.OptionsEntryValue;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
-import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.text.LiteralText;
 
 import java.util.List;
 
@@ -37,25 +37,25 @@ public abstract class GuiOptions extends Screen {
     }
 
     @Override
-    public void init(MinecraftClient client, int width, int height) {
+    protected void init() {
         super.init(client, width, height);
 
         options = getOptions();
-        children.add(options);
+        addDrawableChild(options);
         setFocused(options);
 
         if (saver != null && canceller != null) {
-            addButton(new ButtonWidget(width / 2 - 100, height - 25, 100, 20, new TranslatableText("gui.done"), w -> {
+            addDrawable(new ButtonWidget(width / 2 - 100, height - 25, 100, 20, new TranslatableText("gui.done"), w -> {
                 options.save();
                 saver.run();
                 onClose();
             }));
-            addButton(new ButtonWidget(width / 2 + 5, height - 25, 100, 20, new TranslatableText("gui.cancel"), w -> {
+            addDrawable(new ButtonWidget(width / 2 + 5, height - 25, 100, 20, new TranslatableText("gui.cancel"), w -> {
                 canceller.run();
                 onClose();
             }));
         } else {
-            addButton(new ButtonWidget(width / 2 - 50, height - 25, 100, 20, new TranslatableText("gui.done"), w -> {
+            addDrawable(new ButtonWidget(width / 2 - 50, height - 25, 100, 20, new TranslatableText("gui.done"), w -> {
                 options.save();
                 onClose();
             }));
@@ -66,7 +66,7 @@ public abstract class GuiOptions extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
         renderBackground(matrices);
         options.render(matrices, mouseX, mouseY, partialTicks);
-        drawCenteredString(matrices, textRenderer, title.getString(), width / 2, 12, 16777215);
+        drawCenteredText(matrices, textRenderer, title.getString(), width / 2, 12, 16777215);
         super.render(matrices, mouseX, mouseY, partialTicks);
 
         if (mouseY < 32 || mouseY > height - 32)
@@ -95,8 +95,8 @@ public abstract class GuiOptions extends Screen {
         client.openScreen(parent);
     }
 
-    public void addListener(Element listener) {
-        children.add(listener);
+    public <T extends Element & Drawable & Selectable> T addDrawableChild(T drawableElement) {
+        return super.addDrawableChild(drawableElement);
     }
 
     public abstract OptionsListWidget getOptions();

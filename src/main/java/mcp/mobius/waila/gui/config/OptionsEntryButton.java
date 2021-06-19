@@ -1,10 +1,13 @@
 package mcp.mobius.waila.gui.config;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
+
+import java.util.List;
 
 public class OptionsEntryButton extends OptionsListWidget.Entry {
 
@@ -34,5 +37,10 @@ public class OptionsEntryButton extends OptionsListWidget.Entry {
         }
 
         return false;
+    }
+
+    @Override
+    public List<? extends Selectable> method_37025() {
+        return null;
     }
 }

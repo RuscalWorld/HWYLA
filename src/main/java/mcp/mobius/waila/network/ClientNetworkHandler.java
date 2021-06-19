@@ -6,7 +6,7 @@ import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.impl.DataAccessor;
 import mcp.mobius.waila.api.impl.config.PluginConfig;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ public class ClientNetworkHandler {
 
     public static void init() {
         ClientSidePacketRegistry.INSTANCE.register(ClientNetworkHandler.RECEIVE_DATA, (packetContext, packetByteBuf) -> {
-            CompoundTag tag = packetByteBuf.readCompoundTag();
+            NbtCompound tag = packetByteBuf.readNbt();
             packetContext.getTaskQueue().execute(() -> {
                 DataAccessor.INSTANCE.setServerData(tag);
             });

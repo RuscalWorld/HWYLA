@@ -10,7 +10,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -35,7 +35,7 @@ public class DataAccessor implements ICommonAccessor, IDataAccessor, IEntityAcce
     public Identifier blockRegistryName = Registry.ITEM.getDefaultId();
     public BlockEntity blockEntity;
     public Entity entity;
-    public CompoundTag serverData = null;
+    public NbtCompound serverData = null;
     public long timeLastUpdate = System.currentTimeMillis();
     public double partialFrame;
     public ItemStack stack = ItemStack.EMPTY;
@@ -120,7 +120,7 @@ public class DataAccessor implements ICommonAccessor, IDataAccessor, IEntityAcce
     }
 
     @Override
-    public CompoundTag getServerData() {
+    public NbtCompound getServerData() {
         if ((this.blockEntity != null) && this.isTagCorrectTileEntity(this.serverData))
             return serverData;
 
@@ -128,19 +128,19 @@ public class DataAccessor implements ICommonAccessor, IDataAccessor, IEntityAcce
             return serverData;
 
         if (this.blockEntity != null)
-            return blockEntity.toTag(new CompoundTag());
+            return blockEntity.writeNbt(new NbtCompound());
 
         if (this.entity != null)
-            return entity.toTag(new CompoundTag());
+            return entity.writeNbt(new NbtCompound());
 
-        return new CompoundTag();
+        return new NbtCompound();
     }
 
-    public void setServerData(CompoundTag tag) {
+    public void setServerData(NbtCompound tag) {
         this.serverData = tag;
     }
 
-    private boolean isTagCorrectTileEntity(CompoundTag tag) {
+    private boolean isTagCorrectTileEntity(NbtCompound tag) {
         if (tag == null) {
             this.timeLastUpdate = System.currentTimeMillis() - 250;
             return false;
@@ -159,7 +159,7 @@ public class DataAccessor implements ICommonAccessor, IDataAccessor, IEntityAcce
         }
     }
 
-    private boolean isTagCorrectEntity(CompoundTag tag) {
+    private boolean isTagCorrectEntity(NbtCompound tag) {
         if (tag == null || !tag.contains("WailaEntityID")) {
             this.timeLastUpdate = System.currentTimeMillis() - 250;
             return false;
@@ -167,7 +167,7 @@ public class DataAccessor implements ICommonAccessor, IDataAccessor, IEntityAcce
 
         int id = tag.getInt("WailaEntityID");
 
-        if (id == this.entity.getEntityId())
+        if (id == this.entity.getId())
             return true;
         else {
             this.timeLastUpdate = System.currentTimeMillis() - 250;

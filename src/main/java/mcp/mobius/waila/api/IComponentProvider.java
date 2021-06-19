@@ -1,7 +1,6 @@
 package mcp.mobius.waila.api;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
@@ -23,7 +22,7 @@ public interface IComponentProvider {
      * Will only be called if the implementing class is registered via {@link IRegistrar#registerStackProvider}.</br>
      * <p>
      * This method is only called on the client side. If you require data from the server, you should also implement
-     * {@link IServerDataProvider#appendServerData(CompoundTag, ServerPlayerEntity, World, Object)} and add the data to the {@link CompoundTag}
+     * {@link IServerDataProvider#appendServerData(NbtCompound, ServerPlayerEntity, World, Object)} and add the data to the {@link NbtCompound}
      * there, which can then be read back using {@link IDataAccessor#getServerData()} ()}. If you rely on the client knowing
      * the data you need, you are not guaranteed to have the proper values.
      *
@@ -41,7 +40,7 @@ public interface IComponentProvider {
      * You are supposed to always return the modified input tooltip.</br>
      * <p>
      * This method is only called on the client side. If you require data from the server, you should also implement
-     * {@link IServerDataProvider#appendServerData(CompoundTag, ServerPlayerEntity, World, Object)} and add the data to the {@link CompoundTag}
+     * {@link IServerDataProvider#appendServerData(net.minecraft.nbt.NbtCompound, ServerPlayerEntity, World, Object)} and add the data to the {@link net.minecraft.nbt.NbtCompound}
      * there, which can then be read back using {@link IDataAccessor#getServerData()} ()}. If you rely on the client knowing
      * the data you need, you are not guaranteed to have the proper values.
      *
@@ -60,7 +59,7 @@ public interface IComponentProvider {
      * You are supposed to always return the modified input tooltip.</br>
      * <p>
      * This method is only called on the client side. If you require data from the server, you should also implement
-     * {@link IServerDataProvider#appendServerData(CompoundTag, ServerPlayerEntity, World, Object)} and add the data to the {@link CompoundTag}
+     * {@link IServerDataProvider#appendServerData(net.minecraft.nbt.NbtCompound, ServerPlayerEntity, World, Object)} and add the data to the {@link net.minecraft.nbt.NbtCompound}
      * there, which can then be read back using {@link IDataAccessor#getServerData()} ()}. If you rely on the client knowing
      * the data you need, you are not guaranteed to have the proper values.
      *
@@ -82,7 +81,7 @@ public interface IComponentProvider {
      * to be safe.
      * <p>
      * This method is only called on the client side. If you require data from the server, you should also implement
-     * {@link IServerDataProvider#appendServerData(CompoundTag, ServerPlayerEntity, World, Object)} and add the data to the {@link CompoundTag}
+     * {@link IServerDataProvider#appendServerData(net.minecraft.nbt.NbtCompound, ServerPlayerEntity, World, Object)} and add the data to the {@link net.minecraft.nbt.NbtCompound}
      * there, which can then be read back using {@link IDataAccessor#getServerData()} ()}. If you rely on the client knowing
      * the data you need, you are not guaranteed to have the proper values.
      *

@@ -4,7 +4,7 @@ import mcp.mobius.waila.Waila;
 import mcp.mobius.waila.api.*;
 import mcp.mobius.waila.utils.ModIdentification;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -36,7 +36,7 @@ public class HUDHandlerEntities implements IEntityComponentProvider {
             if (living.getMaxHealth() > Waila.CONFIG.get().getGeneral().getMaxHealthForRender())
                 tooltip.add(new TranslatableText("tooltip.waila.health", String.format("%.2f", health), String.format("%.2f", maxHealth)));
             else {
-                CompoundTag healthData = new CompoundTag();
+                NbtCompound healthData = new NbtCompound();
                 healthData.putFloat("health", health);
                 healthData.putFloat("max", maxHealth);
                 tooltip.add(new RenderableTextComponent(PluginCore.RENDER_ENTITY_HEALTH, healthData));

@@ -62,14 +62,18 @@ public class OverlayRenderer {
 
     public static void renderOverlay(MatrixStack matrices, Tooltip tooltip) {
         MinecraftClient.getInstance().getProfiler().push("Waila Overlay");
-        RenderSystem.pushMatrix();
+        // TODO: ...
+        //RenderSystem.pushMatrix();
         saveGLState();
 
-        RenderSystem.scalef(Waila.CONFIG.get().getOverlay().getOverlaySize().scale, Waila.CONFIG.get().getOverlay().getOverlaySize().scale, 1.0F);
+        // TODO: ...
+        //RenderSystem.scalef(Waila.CONFIG.get().getOverlay().getOverlaySize().scale, Waila.CONFIG.get().getOverlay().getOverlaySize().scale, 1.0F);
 
-        RenderSystem.disableRescaleNormal();
+        // TODO: ...
+        //RenderSystem.disableRescaleNormal();
 
-        RenderSystem.disableLighting();
+        // TODO: ...
+        //RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
 
         WailaRenderEvent.Pre preEvent = new WailaRenderEvent.Pre(DataAccessor.INSTANCE, tooltip.getPosition());
@@ -84,7 +88,8 @@ public class OverlayRenderer {
         tooltip.draw(matrices);
         RenderSystem.disableBlend();
 
-        RenderSystem.enableRescaleNormal();
+        // TODO: ...
+        //RenderSystem.enableRescaleNormal();
         if (tooltip.hasItem())
             DisplayUtil.renderStack(matrices, position.x + 5, position.y + position.height / 2 - 8, RayTracing.INSTANCE.getIdentifierStack());
 
@@ -93,7 +98,8 @@ public class OverlayRenderer {
 
         loadGLState();
         RenderSystem.enableDepthTest();
-        RenderSystem.popMatrix();
+        // TODO: ...
+        //RenderSystem.popMatrix();
         MinecraftClient.getInstance().getProfiler().pop();
     }
 
@@ -110,25 +116,26 @@ public class OverlayRenderer {
     public static void loadGLState() {
         RenderSystem.depthMask(depthMask);
         RenderSystem.depthFunc(depthFunc);
-        if (hasLight)
-            RenderSystem.enableLighting();
-        else
-            RenderSystem.disableLighting();
+        // TODO: ...
+//        if (hasLight)
+//            RenderSystem.enableLighting();
+//        else
+//            RenderSystem.disableLighting();
 
         if (hasDepthTest)
             RenderSystem.enableDepthTest();
         else
             RenderSystem.disableDepthTest();
-        if (hasRescaleNormal)
-            RenderSystem.enableRescaleNormal();
-        else
-            RenderSystem.disableRescaleNormal();
-        if (hasColorMaterial)
-            RenderSystem.enableColorMaterial();
-        else
-            RenderSystem.disableColorMaterial();
+//        if (hasRescaleNormal)
+//            RenderSystem.enableRescaleNormal();
+//        else
+//            RenderSystem.disableRescaleNormal();
+//        if (hasColorMaterial)
+//            RenderSystem.enableColorMaterial();
+//        else
+//            RenderSystem.disableColorMaterial();
 
-        RenderSystem.popAttributes();
+//        RenderSystem.popAttributes();
     }
 
     public static void drawTooltipBox(int x, int y, int w, int h, int bg, int grad1, int grad2) {

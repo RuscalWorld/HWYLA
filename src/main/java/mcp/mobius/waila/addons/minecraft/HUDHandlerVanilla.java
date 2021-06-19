@@ -10,7 +10,7 @@ import net.minecraft.block.entity.SkullBlockEntity;
 import net.minecraft.block.enums.ComparatorMode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
@@ -44,8 +44,8 @@ public class HUDHandlerVanilla implements IComponentProvider, IServerDataProvide
             SkullBlockEntity skull = (SkullBlockEntity) accessor.getBlockEntity();
             if (skull.getOwner() != null) {
                 ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-                CompoundTag tag = new CompoundTag();
-                tag.put("SkullOwner", NbtHelper.fromGameProfile(new CompoundTag(), skull.getOwner()));
+                NbtCompound tag = new NbtCompound();
+                tag.put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), skull.getOwner()));
                 stack.setTag(tag);
                 return stack;
             }
@@ -63,7 +63,7 @@ public class HUDHandlerVanilla implements IComponentProvider, IServerDataProvide
             MobSpawnerBlockEntity spawner = (MobSpawnerBlockEntity) accessor.getBlockEntity();
             ((ITaggableList<Identifier, Text>) tooltip).setTag(OBJECT_NAME_TAG, new TranslatableText(accessor.getBlock().getTranslationKey())
                     .append(new LiteralText(" ("))
-                    .append(spawner.getLogic().getRenderedEntity().getDisplayName())
+                    .append(spawner.getLogic().getRenderedEntity(spawner.getWorld()).getDisplayName())
                     .append(new LiteralText(")"))
             );
         }
@@ -124,7 +124,7 @@ public class HUDHandlerVanilla implements IComponentProvider, IServerDataProvide
     }
 
     @Override
-    public void appendServerData(CompoundTag data, ServerPlayerEntity player, World world, BlockEntity blockEntity) {
+    public void appendServerData(NbtCompound data, ServerPlayerEntity player, World world, BlockEntity blockEntity) {
         if (blockEntity instanceof JukeboxBlockEntity) {
             JukeboxBlockEntity jukebox = (JukeboxBlockEntity) blockEntity;
             data.putString("record", Text.Serializer.toJson(jukebox.getRecord().toHoverableText()));

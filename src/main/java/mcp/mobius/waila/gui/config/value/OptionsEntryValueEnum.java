@@ -1,10 +1,12 @@
 package mcp.mobius.waila.gui.config.value;
 
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -34,5 +36,10 @@ public class OptionsEntryValueEnum<T extends Enum<T>> extends OptionsEntryValue<
     @Override
     public Element getListener() {
         return button;
+    }
+
+    @Override
+    public List<? extends Selectable> method_37025() {
+        return null;
     }
 }
