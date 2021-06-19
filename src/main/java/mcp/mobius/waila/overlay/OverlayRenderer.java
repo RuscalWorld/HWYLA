@@ -11,11 +11,12 @@ import mcp.mobius.waila.api.impl.config.WailaConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 public class OverlayRenderer {
 
@@ -60,20 +61,12 @@ public class OverlayRenderer {
             renderOverlay(matrices, WailaTickHandler.instance().tooltip);
     }
 
+    private static final Identifier WIDGETS_TEXTURE = new Identifier("textures/gui/advancements/widgets.png");
+
     public static void renderOverlay(MatrixStack matrices, Tooltip tooltip) {
         MinecraftClient.getInstance().getProfiler().push("Waila Overlay");
-        // TODO: ...
-        //RenderSystem.pushMatrix();
         saveGLState();
 
-        // TODO: ...
-        //RenderSystem.scalef(Waila.CONFIG.get().getOverlay().getOverlaySize().scale, Waila.CONFIG.get().getOverlay().getOverlaySize().scale, 1.0F);
-
-        // TODO: ...
-        //RenderSystem.disableRescaleNormal();
-
-        // TODO: ...
-        //RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
 
         WailaRenderEvent.Pre preEvent = new WailaRenderEvent.Pre(DataAccessor.INSTANCE, tooltip.getPosition());
@@ -88,8 +81,6 @@ public class OverlayRenderer {
         tooltip.draw(matrices);
         RenderSystem.disableBlend();
 
-        // TODO: ...
-        //RenderSystem.enableRescaleNormal();
         if (tooltip.hasItem())
             DisplayUtil.renderStack(matrices, position.x + 5, position.y + position.height / 2 - 8, RayTracing.INSTANCE.getIdentifierStack());
 
@@ -98,8 +89,6 @@ public class OverlayRenderer {
 
         loadGLState();
         RenderSystem.enableDepthTest();
-        // TODO: ...
-        //RenderSystem.popMatrix();
         MinecraftClient.getInstance().getProfiler().pop();
     }
 
@@ -110,32 +99,16 @@ public class OverlayRenderer {
         hasColorMaterial = GL11.glGetBoolean(GL11.GL_COLOR_MATERIAL);
         depthFunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
         depthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
-        GL11.glPushAttrib(GL11.GL_CURRENT_BIT); // Leave me alone :(
     }
 
     public static void loadGLState() {
         RenderSystem.depthMask(depthMask);
         RenderSystem.depthFunc(depthFunc);
-        // TODO: ...
-//        if (hasLight)
-//            RenderSystem.enableLighting();
-//        else
-//            RenderSystem.disableLighting();
 
         if (hasDepthTest)
             RenderSystem.enableDepthTest();
         else
             RenderSystem.disableDepthTest();
-//        if (hasRescaleNormal)
-//            RenderSystem.enableRescaleNormal();
-//        else
-//            RenderSystem.disableRescaleNormal();
-//        if (hasColorMaterial)
-//            RenderSystem.enableColorMaterial();
-//        else
-//            RenderSystem.disableColorMaterial();
-
-//        RenderSystem.popAttributes();
     }
 
     public static void drawTooltipBox(int x, int y, int w, int h, int bg, int grad1, int grad2) {

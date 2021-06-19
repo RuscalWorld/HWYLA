@@ -71,14 +71,10 @@ public class DisplayUtil {
     }
 
     public static void enable3DRender() {
-        // TODO: ...
-        //RenderSystem.enableLighting();
         RenderSystem.enableDepthTest();
     }
 
     public static void enable2DRender() {
-        // TODO: ...
-        //RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
     }
 
@@ -93,27 +89,22 @@ public class DisplayUtil {
         float f5 = (float) (endColor >> 16 & 255) / 255.0F;
         float f6 = (float) (endColor >> 8 & 255) / 255.0F;
         float f7 = (float) (endColor & 255) / 255.0F;
-        RenderSystem.disableTexture();
+
         RenderSystem.enableBlend();
-        // TODO: ...
-        //RenderSystem.disableAlphaTest();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.disableTexture();
+
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-        // TODO: ...
-        //RenderSystem.shadeModel(7425);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
-        // TODO: ...
-        buffer.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
-        buffer.vertex((double) (left + right), (double) top, (double) zLevel).color(f1, f2, f3, f).next();
-        buffer.vertex((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).next();
-        buffer.vertex((double) left, (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).next();
-        buffer.vertex((double) (left + right), (double) (top + bottom), (double) zLevel).color(f5, f6, f7, f4).next();
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        buffer.vertex(left + right, top, zLevel).color(f1, f2, f3, f).next();
+        buffer.vertex(left, top, zLevel).color(f1, f2, f3, f).next();
+        buffer.vertex(left, top + bottom, zLevel).color(f5, f6, f7, f4).next();
+        buffer.vertex(left + right, top + bottom, zLevel).color(f5, f6, f7, f4).next();
         tessellator.draw();
-        // TODO: ...
-        //RenderSystem.shadeModel(7424);
+
         RenderSystem.disableBlend();
-        // TODO: ...
-        //RenderSystem.enableAlphaTest();
         RenderSystem.enableTexture();
     }
 
@@ -163,12 +154,8 @@ public class DisplayUtil {
         if (icon == null)
             return;
 
-        // TODO: ...
-        //RenderSystem.enableAlphaTest();
         if (icon.bu != -1)
             DisplayUtil.drawTexturedModalRect(x, y, icon.bu, icon.bv, sx, sy, icon.bsu, icon.bsv);
         DisplayUtil.drawTexturedModalRect(x, y, icon.u, icon.v, sx, sy, icon.su, icon.sv);
-        // TODO: ...
-        //RenderSystem.disableAlphaTest();
     }
 }
